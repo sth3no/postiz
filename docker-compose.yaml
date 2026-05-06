@@ -174,8 +174,10 @@ services:
       - TEMPORAL_NAMESPACE=default
     networks:
       - postiz-network
-    volumes:
-      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+    configs:
+      - source: temporal_dynamicconfig_sql
+        target: /etc/temporal/config/dynamicconfig/development-sql.yaml
+        mode: 0444
 
   temporal-ui:
     container_name: temporal-ui
@@ -200,3 +202,13 @@ volumes:
 networks:
   postiz-network:
     name: postiz-network
+
+configs:
+  temporal_dynamicconfig_sql:
+    content: |
+      limit.maxIDLength:
+        - value: 255
+          constraints: {}
+      system.forceSearchAttributesCacheRefreshOnRead:
+        - value: true
+          constraints: {}
