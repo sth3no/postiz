@@ -200,5 +200,6 @@ volumes:
 
 networks:
   postiz-network:
+    name: postiz-network
   temporal-network:
     name: temporal-network
