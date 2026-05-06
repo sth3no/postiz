@@ -80,7 +80,6 @@ services:
       - "${POSTIZ_BIND:-127.0.0.1}:${POSTIZ_PORT:-4007}:5000"
     networks:
       - postiz-network
-      - temporal-network
     depends_on:
       postiz-postgres:
         condition: service_healthy
@@ -135,7 +134,7 @@ services:
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
       - xpack.security.enabled=false
     networks:
-      - temporal-network
+      - postiz-network
     expose:
       - 9200
     volumes:
@@ -149,7 +148,7 @@ services:
       POSTGRES_PASSWORD: ${TEMPORAL_POSTGRES_PASSWORD:-temporal}
       POSTGRES_USER: ${TEMPORAL_POSTGRES_USER:-temporal}
     networks:
-      - temporal-network
+      - postiz-network
     expose:
       - 5432
     volumes:
@@ -174,7 +173,7 @@ services:
       - ES_VERSION=v7
       - TEMPORAL_NAMESPACE=default
     networks:
-      - temporal-network
+      - postiz-network
     volumes:
       - ./dynamicconfig:/etc/temporal/config/dynamicconfig
 
@@ -186,7 +185,7 @@ services:
       - TEMPORAL_ADDRESS=temporal:7233
       - TEMPORAL_CORS_ORIGINS=http://127.0.0.1:8080
     networks:
-      - temporal-network
+      - postiz-network
     ports:
       - "${TEMPORAL_UI_BIND:-127.0.0.1}:${TEMPORAL_UI_PORT:-8080}:8080"
 
@@ -201,5 +200,3 @@ volumes:
 networks:
   postiz-network:
     name: postiz-network
-  temporal-network:
-    name: temporal-network
